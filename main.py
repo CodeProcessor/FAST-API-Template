@@ -4,10 +4,10 @@
 @Author:      dulanj
 @Time:        2021-09-23 11.22
 """
+from io import BytesIO
 from typing import Optional
 
-import cv2
-import numpy as np
+from PIL import Image
 from fastapi import Body
 from fastapi import FastAPI
 from pydantic import Required
@@ -27,6 +27,11 @@ def read_item(item_id: int, q: Optional[str] = None):
 
 @app.post("/image/predict")
 def authenticate(image_byte_stream: bytes = Body(Required, media_type="application/octet-stream")):
-    img = cv2.imdecode(np.frombuffer(image_byte_stream, np.uint8), -1)
-    cv2.imwrite("test.jpg", img)
+    # import cv2
+    # import numpy as np
+    # img = cv2.imdecode(np.frombuffer(image_byte_stream, np.uint8), -1)
+    # cv2.imwrite("test.jpg", img)
+
+    img = Image.open(BytesIO(image_byte_stream))
+    img.save("test_p.png")
     return {"status_code": "Image saved", "status": "200"}
